@@ -1,55 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investment Calculator</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#calculator">Calculator</a></li>
-                <li><a href="#">About</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <section id="welcome">
-            <h1>Welcome to the Investment Calculator</h1>
-            <p>Calculate your weekly payout and see how much you can earn by compounding week by week over 52 weeks.</p>
-        </section>
-
-        <section id="calculator">
-            <h2>Investment Calculator</h2>
-            <label for="investment">Enter Investment Amount:</label>
-            <input type="number" id="investment" placeholder="Enter your investment">
-            <button onclick="calculate()">Calculate</button>
-
-            <div id="results">
-                <h3>Weekly Payout: <span id="weeklyPayout">$0</span></h3>
-                <h3>Total After 52 Weeks: <span id="totalAmount">$0</span></h3>
-            </div>
-
-            <table id="compoundingTable">
-                <thead>
-                    <tr>
-                        <th>Week</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Investment Calculator. All rights reserved.</p>
-    </footer>
-
-    <script src="script.js"></script>
-</body>
-</html>
+function calculate() {
+    const investment = parseFloat(document.getElementById('investment').value);
+    const weeklyRate = 0.0875; // 8.75%
+    const minWeeklyPayout = 4000; // Minimum weekly payout
+    
+    let weeklyPayout = investment * weeklyRate;
+    
+    if (weeklyPayout < minWeeklyPayout) {
+        weeklyPayout = minWeeklyPayout;
+    }
+    
+    let totalAmount = investment;
+    let tableBody = document.querySelector('#compoundingTable tbody');
+    tableBody.innerHTML = ''; // Clear previous results
+    
+    // Fill table for 52 weeks
+    for (let week = 1; week <= 52; week++) {
+        totalAmount *= (1 + weeklyRate);
+        const row = `<tr><td>${week}</td><td>${totalAmount.toFixed(2)}</td></tr>`;
+        tableBody.innerHTML += row;
+    }
+    
+    // Update weekly payout and total amount
+    document.getElementById('weeklyPayout').innerText = `$${weeklyPayout.toFixed(2)}`;
+    document.getElementById('totalAmount').innerText = `$${totalAmount.toFixed(2)}`;
+}
